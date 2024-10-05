@@ -6,6 +6,7 @@ import { api_host } from "config/api_host";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "store/reducers/authReducer";
+import axiosErrorHandler from "components/axiosErrorHandler";
 
 export default function Verify() {
 
@@ -22,7 +23,7 @@ export default function Verify() {
             dispatch(logout());
             navigate("/login")
         }).catch((error) => {
-            console.log(error);
+            axiosErrorHandler(error)
         });
     }
 

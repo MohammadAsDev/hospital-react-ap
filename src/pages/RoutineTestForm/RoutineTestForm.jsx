@@ -34,7 +34,11 @@ export default function RoutineTestForm() {
 
     const handleCreateTest = (event) => {
         event.preventDefault();
-        axiosInstance.post(`${api_host}/appointements/me/patients/${id}/tests` , test)
+        const testForm = new FormData()
+        Object.entries(test).forEach(entry => {
+            if(entry[1])    testForm.append(entry[0] , entry[1])
+        });
+        axiosInstance.post(`${api_host}/appointements/me/patients/${id}/tests` , testForm)
         .then(() => {
             createAlert("Success" , "تمّ إضافة إختبار جديد");
             navigate(`/my-patients/${id}`);
@@ -55,7 +59,7 @@ export default function RoutineTestForm() {
                         value={test.body_temperature}
                         direction="ltr"
                         onChange={handleInput}
-                        required={true}
+                        required
                     />
                     <InputField 
                         title="معدل ضربات القلب"
@@ -64,8 +68,7 @@ export default function RoutineTestForm() {
                         value={test.pulse_rate}
                         direction="ltr"
                         onChange={handleInput}
-                        required={true}
-        
+                        required        
                     />
                     <InputField 
                         title="معدل التنفس"
@@ -74,7 +77,7 @@ export default function RoutineTestForm() {
                         value={test.breathing_rate}
                         direction="ltr"
                         onChange={handleInput}
-                        required={true}
+                        required
                     />
 
                     <InputField

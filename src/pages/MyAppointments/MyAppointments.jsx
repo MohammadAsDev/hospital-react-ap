@@ -25,6 +25,7 @@ export default function MyAppointments() {
       setNPages(Math.ceil(response.data.total / response.data.per_page));
       setAppointmentsList(response.data.data)
     }).catch(error => {
+      setAppointmentsList([]);
       axiosErrorHandler(error);
     })
   }, []);
@@ -32,23 +33,23 @@ export default function MyAppointments() {
   return (
     <div className="flex justify-center items-center w-full md:p-2 m-auto overflow-auto">
       <section className="w-full max-w-7xl p-6 mx-auto bg-white md:rounded-md shadow-md  my-16">
-        <div class="relative overflow-x-auto">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div className="relative overflow-x-auto">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   اسم الطبيب
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   القسم
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   التاريخ
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   الفترة
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   الحالة
                 </th>
               </tr>

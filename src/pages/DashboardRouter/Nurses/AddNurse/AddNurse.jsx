@@ -85,11 +85,12 @@ export default function AddNurse() {
     })
       .then(response => {
         navigate('/dashboard/nurses')
-        setOnSendRequest(false);
       })
       .catch(error => {
         axiosErrorHandler(error)
       });
+
+      setOnSendRequest(false);
 
   };
 

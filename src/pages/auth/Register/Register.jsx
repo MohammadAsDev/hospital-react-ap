@@ -5,6 +5,7 @@ import InputField from "components/InputField/InputField";
 import { Spinner } from "components";
 import { createAlert } from "components/Alert/Alert";
 import axiosInstance from "services/axiosClient";
+import axiosErrorHandler from "components/axiosErrorHandler";
 
 export default function Register() {
   // axios.interceptors.response.use((response) => response, axiosErrorHandler);
@@ -85,7 +86,7 @@ export default function Register() {
           }
         })
         .catch((error) => {
-          createAlert("Error", error.response.status);
+          axiosErrorHandler(error)
           setOnSendRequest(false);
         });
     } catch (error) {

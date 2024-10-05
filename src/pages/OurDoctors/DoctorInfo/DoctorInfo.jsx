@@ -164,6 +164,18 @@ const DoctorSchedule = ({open=false , close}) => {
   const { auth } = useSelector(state => state.auth);
   const [isLoaded , setIsLoaded] = useState(false);
 
+  const arabicTranslate = (dayName) => {
+    switch(dayName.toLowerCase()) {
+      case "sunday" : return "الأحد"
+      case "monday" : return "الإثنين"
+      case "tuesday" : return "الثلاثاء"
+      case "wednesday" : return "الأربعاء"
+      case "thursday" : return "الخميس"
+      case "friday" : return "الجمعة"
+      case "saturday" : return "السبت"
+    }
+  }
+
   useEffect(() => {
     if(isPatient(auth.role))
       axiosInstance.get(`${api_host}/appointements/schedule/doctors/${id}`).then(response => {
@@ -208,7 +220,7 @@ const DoctorSchedule = ({open=false , close}) => {
                         Object.keys(appointmentsSchedule)
                         .filter(k => k != "working_time")
                         .map(k => <tr className="border border-gray-300">
-                          <th className="font-bold">{appointmentsSchedule[k].date} ({appointmentsSchedule[k].day_name})</th>
+                          <th className="font-bold">{appointmentsSchedule[k].date} ({arabicTranslate(appointmentsSchedule[k].day_name)})</th>
                         
                           {
                             Object.values(appointmentsSchedule[k].periods).map(isAllocatedPeriod => ( 

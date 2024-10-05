@@ -46,12 +46,17 @@ const ProfileElement = ({type , data}) => {
                                 </div>
                             </div>
 
-                            <div>
-                                <div className="flex flex-col gap-2 px-5">
-                                    <p>القسم: {data.departement_name}</p>
-                                    <p>إختصاص القسم: {DOCTOR_SPECIALIZATION[data.departement.specialization]}</p>
+                            {
+                                data.departement && (
+                                <div>
+                                    <div className="flex flex-col gap-2 px-5">
+                                        <p>القسم: {data.departement_name}</p>
+                                        <p>إختصاص القسم: {DOCTOR_SPECIALIZATION[data.departement.specialization]}</p>
+                                    </div>
                                 </div>
-                            </div>
+                                )
+                                
+                            }
                         </div>
                         </div>
                     )}

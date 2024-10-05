@@ -4,7 +4,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { RiStethoscopeFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
-import { isAdmin , isStaff , isPatient, isDoctor } from "store/reducers/authReducer";
+import { isAdmin , isStaff , isPatient, isDoctor , isAnonymous } from "store/reducers/authReducer";
 import { ReactComponent as Account } from "../../../assets/images/account.svg"
 
 export default function Navigation() {
@@ -14,8 +14,10 @@ export default function Navigation() {
   const [isOpenNavigation, setIsOpenNavigation] = useState(true);
 
   const isNormalUser = !(isAdmin(auth.role) || isStaff(auth.role))
+  const needVerification = isAnonymous(auth.role)
 
   if (!auth.isLoggedIn) return;
+  if (needVerification) return;
 
   return (
     <div className="fixed bottom-4 z-40 right-4">

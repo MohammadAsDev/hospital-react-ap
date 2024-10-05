@@ -36,16 +36,18 @@ const TestElement = ({test}) => {
                     </div>
             </div>
             {
-                test.prescription ? (
+                test.prescription || test.medical_notes  ? (
                 <div className="bg-sky-100 relative bottom-3 rounded-2xl -z-10">
-                    <div className="p-3">
-                        <div>
-                            <h3 className="text-2xl">الوصفة الطبية:</h3>
-                        </div>
-                        <div className="px-4">
-                            {test.prescription}
-                        </div>
-                    </div>
+                    {
+                        test.prescription ? (<div className="p-3">
+                            <div>
+                                <h3 className="text-2xl">الوصفة الطبية:</h3>
+                            </div>
+                            <div className="px-4">
+                                {test.prescription}
+                            </div>
+                        </div>) : <></>
+                    }
                     {
                         test.medical_notes ? (
                             <div className="p-3">
@@ -65,23 +67,22 @@ const TestElement = ({test}) => {
     );
 }
 
-const DoctorAppointment = ({data}) => {
+const DoctorAppointment = ({patient, data}) => {
   
     const [isLoaded, setIsLoaded] = useState(false);
     const [routineTests, setRoutineTests] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axiosInstance.get(`${api_host}/tests/me/patients/${data.id}`).then(
+        axiosInstance.get(`${api_host}/tests/me/patients/${patient.id}`).then(
             response => {
-                console.log(response);
                 setIsLoaded(true);
                 setRoutineTests(response.data);
             }
         ).catch(error => {
             axiosErrorHandler(error)
         })
-    }, data.id)
+    }, patient.id)
 
     return (
         <>
@@ -90,12 +91,12 @@ const DoctorAppointment = ({data}) => {
                 <h3 className="font-bold text-3xl py-4">المعلومات الشّخصيّة:</h3>
                 <div className="flex justify-between items-center gap-8">
                     <div className="w-48">
-                        <img src={data.profile_picture_path}/>
+                        <img src={patient.profile_picture_path}/>
                     </div>
                     <div>
-                        <h3>اسم المريض: {data.first_name + " " + data.last_name}</h3>
-                        <h3>تاريخ الميلاد: {data.birth_date}</h3>
-                        <h3>الجنس: {data.gender == 0 ? "ذكر" : "أنثى"}</h3>
+                        <h3>اسم المريض: {patient.first_name + " " + patient.last_name}</h3>
+                        <h3>تاريخ الميلاد: {patient.birth_date}</h3>
+                        <h3>الجنس: {patient.gender == 0 ? "ذكر" : "أنثى"}</h3>
                     </div>
 
                 </div>
@@ -136,22 +137,7 @@ const DoctorAppointment = ({data}) => {
     )
 }
 
-const PatientAppointment = ({data}) => {
-
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [routineTests, setRoutineTests] = useState([]);
-
-    useEffect(() => {
-        axiosInstance.get(`${api_host}/tests/me/${data.id}`).then(
-            response => {
-                console.log(response);
-                setIsLoaded(true);
-                setRoutineTests(response.data);
-            }
-        ).catch(error => {
-            axiosErrorHandler(error)
-        })
-    }, data.id)
+const PatientAppointment = ({doctor, data}) => {
 
     return (
         <>
@@ -160,14 +146,14 @@ const PatientAppointment = ({data}) => {
                 <h3 className="font-bold text-3xl py-4">المعلومات الشّخصيّة:</h3>
                 <div className="flex justify-between items-center gap-8">
                     <div className="w-48">
-                        <img src={data.profile_picture_path}/>
+                        <img src={doctor.profile_picture_path}/>
                     </div>
                     <div>
-                        <h3>اسم الطبيب: {data.first_name + " " + data.last_name}</h3>
-                        <h3>رقم الهاتف: {data.phone_number}</h3>
-                        <h3>البريد الإلكتروني: {data.email}</h3>
-                        <h3>الإختصاص: {DOCTOR_SPECIALIZATION[data.specialization]}</h3>
-                        <h3>التقيم: {DOCTOR_RATE[data.rate]}</h3>
+                        <h3>اسم الطبيب: {doctor.first_name + " " + doctor.last_name}</h3>
+                        <h3>رقم الهاتف: {doctor.phone_number}</h3>
+                        <h3>البريد الإلكتروني: {doctor.email}</h3>
+                        <h3>الإختصاص: {DOCTOR_SPECIALIZATION[doctor.specialization]}</h3>
+                        <h3>التقيم: {DOCTOR_RATE[doctor.rate]}</h3>
                     </div>
 
                 </div>
@@ -190,6 +176,8 @@ export default function AppointmentDetails() {
     const { id } = useParams()
 
     const [appointmentDetails, setAppointmentDetails] = useState({});
+    const [doctorDetails, setDoctorDetails] = useState({});
+    const [patientDetails, setPatientDetails] = useState({});
 
     const { auth } = useSelector(state => state.auth);
     const resource = isDoctor(auth.role) ? "me/patients" : "me";
@@ -197,6 +185,8 @@ export default function AppointmentDetails() {
     useEffect(() => {
         axiosInstance.get(`${api_host}/appointements/${resource}/${id}/`).then((response) => {
             setAppointmentDetails(response.data)
+            setDoctorDetails(response.data.doctor)
+            setPatientDetails(response.data.patient)
         }).catch((error) => {
             axiosErrorHandler(error);
         })
@@ -206,8 +196,8 @@ export default function AppointmentDetails() {
         <>
             {
                 isDoctor(auth.role) ? 
-                <DoctorAppointment data={appointmentDetails}/> : 
-                <PatientAppointment data={appointmentDetails}/>
+                <DoctorAppointment patient={patientDetails} data={appointmentDetails}/> : 
+                <PatientAppointment doctor={doctorDetails} data={appointmentDetails}/>
             }
         </>
     );
