@@ -1,0 +1,9 @@
+[
+    {"title": "الرئيسية", "url":"/dashboard"},
+    {"title": "الأطباء", "url":"/dashboard/doctors"},
+    {"title": "اضافة طبيب", "url":"/dashboard/doctors/add"},
+    {"title": "الممرضين", "url":"/dashboard/nurses"},
+    {"title": "اضافة ممرض", "url":"/dashboard/nurses/add"},
+    {"title": "الاقسام", "url":"/dashboard/sections"},
+    {"title": "اضافة قسم", "url":"/dashboard/sections/add"}
+]
