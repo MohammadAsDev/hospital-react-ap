@@ -52,7 +52,7 @@ export default function Clinics() {
             <div className="w-full max-w-7xl_">
             <div className="flex gap-4 mb-6">
               <Link to={"/dashboard/clinics/add"} className="btn btn-primary text-sm">
-                إضافة قسم
+                إضافة غرفة
               </Link>
             </div>
             </div>

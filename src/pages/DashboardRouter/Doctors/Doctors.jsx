@@ -1,7 +1,7 @@
 import { api_host } from "config/api_host";
 import { useEffect, useState } from "react";
 import { Spinner } from "components";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { ActionModal } from "components/Modals";
 import axiosInstance from "services/axiosClient";
 import Paginator from "components/Paginator/Paginator";
@@ -13,23 +13,44 @@ export default function Doctors() {
   const [loadData, setLoadData] = useState(false);
   const [openDeleteDoctorModal, setOpenDeleteDoctorModal] = useState(false);
   const [doctorId, setDoctorId] = useState(0);
+  const [departmentData, setDepartmentData] = useState({});
+  const { department_id } = useParams();
 
   const navigate = useNavigate();
 
-  const [nPages, setNPages] = useState(1)
+
+  const [nPages, setNPages] = useState(1);
 
 
   useEffect(() => {
 
+
+    const doctorsUrl = 
+    department_id ? 
+    `${api_host}/departements/${department_id}/doctors/` : 
+    `${api_host}/doctors/?full-detailed=true`;
+  
+
     axiosInstance
-      .get(`${api_host}/doctors?full-detailed=true&page=1`)
+      .get(doctorsUrl)
       .then((response) => {
         if (response.status == 200) {
-
           setNPages(Math.ceil(response.data.total / response.data.per_page))
           setDoctorsList(response.data.data);
           setLoadData(true);
         }
+      })
+      .then(() => {
+        if (department_id)
+          axiosInstance
+            .get(`${api_host}/departements/${department_id}/`)
+            .then(response => {
+              if (response.status == 200) {
+                setDepartmentData(response.data)
+              }
+            }).catch(error => {
+              console.log(error)
+            })
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -50,13 +71,22 @@ export default function Doctors() {
 
   return (
     <div className="w-full max-w-7xl_">
-      <div className="flex gap-4 mb-6">
+      {
+        department_id ?
+        <></> :
+        <div className="flex gap-4 mb-6">
         <Link to={"/dashboard/doctors/add"} className="btn btn-primary text-sm">
           إضافة طبيب
         </Link>
-      </div>
+        </div>
+      }
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        {
+          department_id ? 
+          <h1 className="text-gray-500 font-bold text-xl p-5">الأطباء الموجودين في ({departmentData.name})</h1> :
+          <></>
+        }
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -133,7 +163,7 @@ export default function Doctors() {
                     <button
                       className="font-medium text-white  btn bg-blue-600 btn-sm"
                       onClick={() => {
-                        navigate(`${doctor.id}/edit`)
+                        navigate(`/dashboard/doctors/${doctor.id}/edit`)
                       }}
                     >
                       تعديل
@@ -156,7 +186,7 @@ export default function Doctors() {
 
       <div className="p-5">
           <Paginator 
-            resources={`doctors`} 
+            resources={department_id ? `departements/${department_id}/doctors` : `doctors`} 
             dataSetter={setDoctorsList}
             nPages={nPages}
             query={"full-detailed=true"}

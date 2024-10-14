@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import Doctor from "components/Doctor/Doctor";
+import Doctor, { DOCTOR_SPECIALIZATION } from "components/Doctor/Doctor";
 import axios from "axios";
 import { api_host } from "config/api_host";
 
@@ -8,7 +8,6 @@ export default function FindDoctor() {
   // const [doctorsList, setDoctorsList] = useState([]);
   const [doctorName, setDoctorName] = useState("");
   const [doctorsResult, setDoctorsResult] = useState([]);
-
 
 
   const searchDoctor = (name) => {
@@ -25,10 +24,10 @@ export default function FindDoctor() {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col justify-around md:my-2 py-2 md:py-4 px-8 md:rounded-md w-full md:max-w-7xl h-24 md:h-52  bg-blue-800_ bg-gradient-to-l from-blue-800 to-blue-700">
+    <div className="w-full h-fit mb-7">
+      <div className="flex flex-col justify-around md:my-2 py-2 md:py-4 px-8 md:rounded-md w-full md:max-w-7xl h-24 md:h-52  bg-gray-200">
         <div className="flex items-end gap-3 ">
-          <h5 className="text-white font-bold md:text-4xl"> ابحث عن طبيب </h5>
+          <h5 className="text-gray-500 font-bold md:text-4xl"> ابحث عن طبيب </h5>
           <div className=" w-10 h-fit mb-2 border md:border-[2px] border-gray-400"></div>
         </div>
 
@@ -39,7 +38,7 @@ export default function FindDoctor() {
           <div className="relative">
             <input
               type="search"
-              className="block w-full p-2 pl-14 md:text-2xl text-gray-900 border outline-0 border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-100 focus:border-blue-100 "
+              className="block w-full p-2 pl-14 md:text-2xl text-gray-900 border outline-0 border-gray-400 rounded-lg bg-gray-50 focus:ring-blue-100 focus:border-blue-100 "
               placeholder="ادخل اسم الدكتور"
               required
               onChange={(e) => setDoctorName(e.target.value)}

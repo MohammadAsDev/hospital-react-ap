@@ -12,6 +12,8 @@ export default function OurDoctors() {    // needs pagination
   const [doctorsList, setDoctorsList] = useState([]);
   const [loadData, setLoadData] = useState(false);
   const [nPages, setNPages] = useState(0);
+  const [selectedSpec, selectSpec] = useState(-1)
+
 
   useEffect(() => {
 
@@ -29,11 +31,37 @@ export default function OurDoctors() {    // needs pagination
       })
   }, []);
 
+  const listDoctorsWithSpec = (spec) => {
+    axiosInstance
+    .get(`${api_host}/doctors/search/?spec=${spec}`)
+    .then(response => {
+      if (response.status === 200) {
+        setNPages(Math.ceil(response.data.total / response.data.per_page))
+        setDoctorsList(response.data.data);
+        setLoadData(true);
+      }
+    })
+  }
+
+  const specTagHandler = event => {
+    selectSpec(event.target.name)
+    listDoctorsWithSpec(event.target.name)
+  }
+
   return (
     <div className="md:mt-52_ mt-24 md:mt-36 w-full max-w-7xl mx-auto py-4 px-8">
       
       <FindDoctor />
 
+      <div className="my-5 flex justify-center">
+        <div className="flex justify-around gap-3 justify-items-center w-[50%]">
+          <button name="2" onClick={specTagHandler} className="text-black w-fit bg-gray-300 hover:bg-blue-600 hover:text-white duration-150 px-3 py-1 text-sm md:text-xl rounded-2xl">داخليّة</button>
+          <button name="0" onClick={specTagHandler} className="text-black w-fit bg-gray-300 hover:bg-blue-600 hover:text-white duration-150 px-3 py-1 text-sm md:text-xl rounded-2xl">تخدير</button>
+          <button name="3" onClick={specTagHandler} className="text-black w-fit bg-gray-300 hover:bg-blue-600 hover:text-white duration-150 px-3 py-1 text-sm md:text-xl rounded-2xl">عصبيّة</button>
+          <button name="4" onClick={specTagHandler} className="text-black w-fit bg-gray-300 hover:bg-blue-600 hover:text-white duration-150 px-3 py-1 text-sm md:text-xl rounded-2xl">جراحة</button>
+          <button name="1" onClick={specTagHandler} className="text-black w-fit bg-gray-300 hover:bg-blue-600 hover:text-white duration-150 px-3 py-1 text-sm md:text-xl rounded-2xl">جلديّة</button>
+        </div>
+      </div>
 
       <div className="flex mb-12 md:mb-16 justify-between items-center">
         <div className="flex items-end gap-3 ">
@@ -44,7 +72,7 @@ export default function OurDoctors() {    // needs pagination
         </div>
       </div>
       <div className="flex flex-wrap justify-center_ mt-8 gap-8 md:gap-5">
-       {loadData ?  doctorsList.length > 0 &&
+       {loadData ?  doctorsList.length > 0 ?
           doctorsList.map(doctor => (
             <Link
               key={doctor.id}
@@ -57,10 +85,10 @@ export default function OurDoctors() {    // needs pagination
                 <p>{DOCTOR_SPECIALIZATION[doctor.specialization]}</p>
               </div>
             </Link>
-          )) : <Spinner page />}
+          ))  : <p className="text-gray-400 text-4xl text-center w-full">لا يوجد أطباء</p> : <Spinner page />}
       </div>
       <div className="p-5">
-        <Paginator dataSetter={setDoctorsList} resources={"doctors"} nPages={nPages}/>
+        <Paginator query={`spec=${selectedSpec}`} dataSetter={setDoctorsList} resources={selectedSpec != -1 ? "doctors/search" : "doctors"} nPages={nPages}/>
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export const BarChartData = {
   labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   datasets: [
     {
-      label: "Sales",
+      label: "المرضى",
       tension: 0.4,
       borderWidth: 0,
       borderRadius: 4,

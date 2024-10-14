@@ -85,7 +85,15 @@ export default function Sections() {
               sectionsList.map(section => (
                 <tr
                   key={section.id}
-                  className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                  className="odd:bg-white cursor-pointer odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                  onClick={(event) => {
+                    if ( event.target.name == "delete_btn" || event.target.name == "edit_btn" ){
+                      event.preventDefault();
+                      event.stopPropagation();
+                    } else {
+                      navigate(`${section.id}/doctors`)
+                    }
+                  }}
                 >
                   <th
                     scope="row"
@@ -100,6 +108,7 @@ export default function Sections() {
                   <td className="px-6 py-4">
                     <div className="flex flex-row items-center gap-4">
                     <button
+                      name="delete_btn"
                       className="font-medium btn btn-danger btn-sm"
                       onClick={() => {
                         setSectionId(section.id);
@@ -109,6 +118,7 @@ export default function Sections() {
                       حذف
                     </button>
                     <button
+                      name="edit_btn"
                       className="font-medium text-white btn bg-blue-500 btn-sm"
                       onClick={() => {
                         navigate(`${section.id}/edit`)

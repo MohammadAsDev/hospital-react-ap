@@ -98,7 +98,7 @@ const AppointmentForm = ({open = false, close}) => {
     axiosInstance.post(`${api_host}/appointements/` , appointment).then(
       () => {
         close(false);
-        createAlert("Success" , "تمّ حجز الموعد");
+        createAlert("Success" , "تمّ طلب الموعد");
       }
     ).catch(
       (err) => {

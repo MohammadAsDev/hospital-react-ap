@@ -62,6 +62,7 @@ export default function DashboardRouter() {
           <Route path="/sections" element={<Sections />} />
           <Route path="/sections/add" element={<AddSection />} />
           <Route path="/sections/:id/edit" element={<EditSection />} />
+          <Route path="/sections/:department_id/doctors" element={<Doctors />} />
 
           <Route path="/patients" element={<Patients />} />
 
