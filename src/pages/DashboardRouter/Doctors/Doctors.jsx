@@ -22,14 +22,12 @@ export default function Doctors() {
   const [nPages, setNPages] = useState(1);
 
 
+  const doctorsUrl = 
+  department_id ? 
+  `${api_host}/departements/${department_id}/doctors/` : 
+  `${api_host}/doctors/?full-detailed=true`;
+
   useEffect(() => {
-
-
-    const doctorsUrl = 
-    department_id ? 
-    `${api_host}/departements/${department_id}/doctors/` : 
-    `${api_host}/doctors/?full-detailed=true`;
-  
 
     axiosInstance
       .get(doctorsUrl)
@@ -57,7 +55,7 @@ export default function Doctors() {
       });
 
     setLoadData(true);
-  }, []);
+  }, [department_id]);
 
   const handleDelete = () => {
     axiosInstance.delete(`${api_host}/doctors/${doctorId}/`)
