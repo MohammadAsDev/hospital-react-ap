@@ -25,7 +25,6 @@ export default function EditNures() {
 
   const getNurseInfo = () => {
     axiosInstance.get(`${api_host}/nurses/${id}`).then(response => {
-        console.log(response.data)
         setNurse(response.data)
     }).catch(error => {
       console.log(error);
@@ -33,8 +32,8 @@ export default function EditNures() {
 }
 
     const getFullData = () => {
-      axiosInstance.get(`${api_host}/departements/`).then(response => {
-        const departements_data = response.data.data;
+      axiosInstance.get(`${api_host}/departements/?paginated=0`).then(response => {
+        const departements_data = response.data;
         const departementsObj = {}
         departements_data.forEach(dep => {
           departementsObj[dep.id] = dep.name;

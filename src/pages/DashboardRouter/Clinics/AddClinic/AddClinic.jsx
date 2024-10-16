@@ -23,8 +23,8 @@ export default function AddClinic() {
 
     const [departements , setDepartements] = useState({});
     useEffect(() => {
-        axiosInstance.get(`${api_host}/departements/`).then(response => {
-          const departements_data = response.data.data;
+        axiosInstance.get(`${api_host}/departements/?paginated=0`).then(response => {
+          const departements_data = response.data;
           const departementsObj = {}
           departements_data.forEach(dep => {
             departementsObj[dep.id] = dep.name;
